@@ -2,4 +2,5 @@ import { LessonUpdateManyWithoutTracksInput } from "./LessonUpdateManyWithoutTra
 
 export type TrackUpdateInput = {
   lessons?: LessonUpdateManyWithoutTracksInput;
+  title?: string | null;
 };
