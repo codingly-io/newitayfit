@@ -1,7 +1,7 @@
 import { Track as TTrack } from "../api/track/Track";
 
-export const TRACK_TITLE_FIELD = "id";
+export const TRACK_TITLE_FIELD = "title";
 
 export const TrackTitle = (record: TTrack): string => {
-  return record.id || record.id;
+  return record.title || record.id;
 };

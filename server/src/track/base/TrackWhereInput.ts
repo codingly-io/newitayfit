@@ -15,6 +15,7 @@ import { StringFilter } from "../../util/StringFilter";
 import { Type } from "class-transformer";
 import { IsOptional, ValidateNested } from "class-validator";
 import { LessonListRelationFilter } from "../../lesson/base/LessonListRelationFilter";
+import { StringNullableFilter } from "../../util/StringNullableFilter";
 @InputType()
 class TrackWhereInput {
   @ApiProperty({
@@ -39,5 +40,16 @@ class TrackWhereInput {
     nullable: true,
   })
   lessons?: LessonListRelationFilter;
+
+  @ApiProperty({
+    required: false,
+    type: StringNullableFilter,
+  })
+  @Type(() => StringNullableFilter)
+  @IsOptional()
+  @Field(() => StringNullableFilter, {
+    nullable: true,
+  })
+  title?: StringNullableFilter;
 }
 export { TrackWhereInput };

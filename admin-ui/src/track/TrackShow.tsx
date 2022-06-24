@@ -19,6 +19,7 @@ export const TrackShow = (props: ShowProps): React.ReactElement => {
       <SimpleShowLayout>
         <DateField source="createdAt" label="Created At" />
         <TextField label="ID" source="id" />
+        <TextField label="title" source="title" />
         <DateField source="updatedAt" label="Updated At" />
         <ReferenceManyField reference="Lesson" target="TrackId" label="Lessons">
           <Datagrid rowClick="show">

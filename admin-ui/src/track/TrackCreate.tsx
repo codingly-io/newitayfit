@@ -1,11 +1,14 @@
 import * as React from "react";
+
 import {
   Create,
   SimpleForm,
   CreateProps,
   ReferenceArrayInput,
   SelectArrayInput,
+  TextInput,
 } from "react-admin";
+
 import { LessonTitle } from "../lesson/LessonTitle";
 
 export const TrackCreate = (props: CreateProps): React.ReactElement => {
@@ -20,6 +23,7 @@ export const TrackCreate = (props: CreateProps): React.ReactElement => {
         >
           <SelectArrayInput optionText={LessonTitle} />
         </ReferenceArrayInput>
+        <TextInput label="title" source="title" />
       </SimpleForm>
     </Create>
   );

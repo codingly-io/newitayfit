@@ -22,6 +22,7 @@ model Track {
   createdAt DateTime @default(now())
   id        String   @id @default(cuid())
   lessons   Lesson[]
+  title     String?
   updatedAt DateTime @updatedAt
 }
 

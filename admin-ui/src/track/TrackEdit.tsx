@@ -1,11 +1,14 @@
 import * as React from "react";
+
 import {
   Edit,
   SimpleForm,
   EditProps,
   ReferenceArrayInput,
   SelectArrayInput,
+  TextInput,
 } from "react-admin";
+
 import { LessonTitle } from "../lesson/LessonTitle";
 
 export const TrackEdit = (props: EditProps): React.ReactElement => {
@@ -20,6 +23,7 @@ export const TrackEdit = (props: EditProps): React.ReactElement => {
         >
           <SelectArrayInput optionText={LessonTitle} />
         </ReferenceArrayInput>
+        <TextInput label="title" source="title" />
       </SimpleForm>
     </Edit>
   );

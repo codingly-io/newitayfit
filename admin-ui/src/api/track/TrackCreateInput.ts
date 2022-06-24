@@ -2,4 +2,5 @@ import { LessonCreateNestedManyWithoutTracksInput } from "./LessonCreateNestedMa
 
 export type TrackCreateInput = {
   lessons?: LessonCreateNestedManyWithoutTracksInput;
+  title?: string | null;
 };

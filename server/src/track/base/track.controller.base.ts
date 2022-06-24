@@ -53,6 +53,7 @@ export class TrackControllerBase {
       select: {
         createdAt: true,
         id: true,
+        title: true,
         updatedAt: true,
       },
     });
@@ -75,6 +76,7 @@ export class TrackControllerBase {
       select: {
         createdAt: true,
         id: true,
+        title: true,
         updatedAt: true,
       },
     });
@@ -98,6 +100,7 @@ export class TrackControllerBase {
       select: {
         createdAt: true,
         id: true,
+        title: true,
         updatedAt: true,
       },
     });
@@ -130,6 +133,7 @@ export class TrackControllerBase {
         select: {
           createdAt: true,
           id: true,
+          title: true,
           updatedAt: true,
         },
       });
@@ -161,6 +165,7 @@ export class TrackControllerBase {
         select: {
           createdAt: true,
           id: true,
+          title: true,
           updatedAt: true,
         },
       });
