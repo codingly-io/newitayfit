@@ -11,34 +11,46 @@ https://docs.amplication.com/docs/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { TrackWhereUniqueInput } from "../../track/base/TrackWhereUniqueInput";
+import { VideoWhereInput } from "./VideoWhereInput";
 import { ValidateNested, IsOptional } from "class-validator";
 import { Type } from "class-transformer";
-import { VideoCreateNestedManyWithoutLessonsInput } from "./VideoCreateNestedManyWithoutLessonsInput";
+
 @InputType()
-class LessonCreateInput {
+class VideoListRelationFilter {
   @ApiProperty({
     required: false,
-    type: () => TrackWhereUniqueInput,
+    type: () => VideoWhereInput,
   })
   @ValidateNested()
-  @Type(() => TrackWhereUniqueInput)
+  @Type(() => VideoWhereInput)
   @IsOptional()
-  @Field(() => TrackWhereUniqueInput, {
+  @Field(() => VideoWhereInput, {
     nullable: true,
   })
-  track?: TrackWhereUniqueInput | null;
+  every?: VideoWhereInput;
 
   @ApiProperty({
     required: false,
-    type: () => VideoCreateNestedManyWithoutLessonsInput,
+    type: () => VideoWhereInput,
   })
   @ValidateNested()
-  @Type(() => VideoCreateNestedManyWithoutLessonsInput)
+  @Type(() => VideoWhereInput)
   @IsOptional()
-  @Field(() => VideoCreateNestedManyWithoutLessonsInput, {
+  @Field(() => VideoWhereInput, {
     nullable: true,
   })
-  videos?: VideoCreateNestedManyWithoutLessonsInput;
+  some?: VideoWhereInput;
+
+  @ApiProperty({
+    required: false,
+    type: () => VideoWhereInput,
+  })
+  @ValidateNested()
+  @Type(() => VideoWhereInput)
+  @IsOptional()
+  @Field(() => VideoWhereInput, {
+    nullable: true,
+  })
+  none?: VideoWhereInput;
 }
-export { LessonCreateInput };
+export { VideoListRelationFilter };

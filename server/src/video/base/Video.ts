@@ -13,10 +13,9 @@ import { ObjectType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import { IsDate, IsString, ValidateNested, IsOptional } from "class-validator";
 import { Type } from "class-transformer";
-import { Track } from "../../track/base/Track";
-import { Video } from "../../video/base/Video";
+import { Lesson } from "../../lesson/base/Lesson";
 @ObjectType()
-class Lesson {
+class Video {
   @ApiProperty({
     required: true,
   })
@@ -35,12 +34,12 @@ class Lesson {
 
   @ApiProperty({
     required: false,
-    type: () => Track,
+    type: () => Lesson,
   })
   @ValidateNested()
-  @Type(() => Track)
+  @Type(() => Lesson)
   @IsOptional()
-  track?: Track | null;
+  lesson?: Lesson | null;
 
   @ApiProperty({
     required: true,
@@ -49,14 +48,5 @@ class Lesson {
   @Type(() => Date)
   @Field(() => Date)
   updatedAt!: Date;
-
-  @ApiProperty({
-    required: false,
-    type: () => [Video],
-  })
-  @ValidateNested()
-  @Type(() => Video)
-  @IsOptional()
-  videos?: Array<Video>;
 }
-export { Lesson };
+export { Video };

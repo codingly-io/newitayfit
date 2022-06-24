@@ -17,6 +17,10 @@ import { LessonList } from "./lesson/LessonList";
 import { LessonCreate } from "./lesson/LessonCreate";
 import { LessonEdit } from "./lesson/LessonEdit";
 import { LessonShow } from "./lesson/LessonShow";
+import { VideoList } from "./video/VideoList";
+import { VideoCreate } from "./video/VideoCreate";
+import { VideoEdit } from "./video/VideoEdit";
+import { VideoShow } from "./video/VideoShow";
 import { jwtAuthProvider } from "./auth-provider/ra-auth-jwt";
 
 const App = (): React.ReactElement => {
@@ -63,6 +67,13 @@ const App = (): React.ReactElement => {
           edit={LessonEdit}
           create={LessonCreate}
           show={LessonShow}
+        />
+        <Resource
+          name="Video"
+          list={VideoList}
+          edit={VideoEdit}
+          create={VideoCreate}
+          show={VideoShow}
         />
       </Admin>
     </div>
