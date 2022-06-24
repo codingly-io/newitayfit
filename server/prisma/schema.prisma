@@ -1,0 +1,34 @@
+datasource postgres {
+  provider = "postgresql"
+  url      = env("POSTGRESQL_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  createdAt DateTime @default(now())
+  firstName String?
+  id        String   @id @default(cuid())
+  lastName  String?
+  password  String
+  roles     String[]
+  updatedAt DateTime @updatedAt
+  username  String   @unique
+}
+
+model Track {
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  lessons   Lesson[]
+  updatedAt DateTime @updatedAt
+}
+
+model Lesson {
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  track     Track?   @relation(fields: [trackId], references: [id])
+  trackId   String?
+  updatedAt DateTime @updatedAt
+}
