@@ -15,6 +15,7 @@ import { StringFilter } from "../../util/StringFilter";
 import { Type } from "class-transformer";
 import { IsOptional, ValidateNested } from "class-validator";
 import { TrackWhereUniqueInput } from "../../track/base/TrackWhereUniqueInput";
+import { VideoListRelationFilter } from "../../video/base/VideoListRelationFilter";
 @InputType()
 class LessonWhereInput {
   @ApiProperty({
@@ -39,5 +40,17 @@ class LessonWhereInput {
     nullable: true,
   })
   track?: TrackWhereUniqueInput;
+
+  @ApiProperty({
+    required: false,
+    type: () => VideoListRelationFilter,
+  })
+  @ValidateNested()
+  @Type(() => VideoListRelationFilter)
+  @IsOptional()
+  @Field(() => VideoListRelationFilter, {
+    nullable: true,
+  })
+  videos?: VideoListRelationFilter;
 }
 export { LessonWhereInput };

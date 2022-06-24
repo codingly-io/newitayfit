@@ -10,7 +10,7 @@ https://docs.amplication.com/docs/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "nestjs-prisma";
-import { Prisma, Lesson, Track } from "@prisma/client";
+import { Prisma, Lesson, Video, Track } from "@prisma/client";
 
 export class LessonServiceBase {
   constructor(protected readonly prisma: PrismaService) {}
@@ -45,6 +45,17 @@ export class LessonServiceBase {
     args: Prisma.SelectSubset<T, Prisma.LessonDeleteArgs>
   ): Promise<Lesson> {
     return this.prisma.lesson.delete(args);
+  }
+
+  async findVideos(
+    parentId: string,
+    args: Prisma.VideoFindManyArgs
+  ): Promise<Video[]> {
+    return this.prisma.lesson
+      .findUnique({
+        where: { id: parentId },
+      })
+      .videos(args);
   }
 
   async getTrack(parentId: string): Promise<Track | null> {

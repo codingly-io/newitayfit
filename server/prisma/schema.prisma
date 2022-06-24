@@ -31,4 +31,13 @@ model Lesson {
   track     Track?   @relation(fields: [trackId], references: [id])
   trackId   String?
   updatedAt DateTime @updatedAt
+  videos    Video[]
+}
+
+model Video {
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  lesson    Lesson?  @relation(fields: [lessonId], references: [id])
+  lessonId  String?
+  updatedAt DateTime @updatedAt
 }

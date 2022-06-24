@@ -18,43 +18,40 @@ import * as errors from "../../errors";
 import { Request } from "express";
 import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
-import { LessonService } from "../lesson.service";
+import { VideoService } from "../video.service";
 import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
 import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
-import { LessonCreateInput } from "./LessonCreateInput";
-import { LessonWhereInput } from "./LessonWhereInput";
-import { LessonWhereUniqueInput } from "./LessonWhereUniqueInput";
-import { LessonFindManyArgs } from "./LessonFindManyArgs";
-import { LessonUpdateInput } from "./LessonUpdateInput";
-import { Lesson } from "./Lesson";
-import { VideoFindManyArgs } from "../../video/base/VideoFindManyArgs";
-import { Video } from "../../video/base/Video";
-import { VideoWhereUniqueInput } from "../../video/base/VideoWhereUniqueInput";
+import { VideoCreateInput } from "./VideoCreateInput";
+import { VideoWhereInput } from "./VideoWhereInput";
+import { VideoWhereUniqueInput } from "./VideoWhereUniqueInput";
+import { VideoFindManyArgs } from "./VideoFindManyArgs";
+import { VideoUpdateInput } from "./VideoUpdateInput";
+import { Video } from "./Video";
 @swagger.ApiBearerAuth()
 @common.UseGuards(defaultAuthGuard.DefaultAuthGuard, nestAccessControl.ACGuard)
-export class LessonControllerBase {
+export class VideoControllerBase {
   constructor(
-    protected readonly service: LessonService,
+    protected readonly service: VideoService,
     protected readonly rolesBuilder: nestAccessControl.RolesBuilder
   ) {}
 
   @common.UseInterceptors(AclValidateRequestInterceptor)
   @nestAccessControl.UseRoles({
-    resource: "Lesson",
+    resource: "Video",
     action: "create",
     possession: "any",
   })
   @common.Post()
-  @swagger.ApiCreatedResponse({ type: Lesson })
+  @swagger.ApiCreatedResponse({ type: Video })
   @swagger.ApiForbiddenResponse({ type: errors.ForbiddenException })
-  async create(@common.Body() data: LessonCreateInput): Promise<Lesson> {
+  async create(@common.Body() data: VideoCreateInput): Promise<Video> {
     return await this.service.create({
       data: {
         ...data,
 
-        track: data.track
+        lesson: data.lesson
           ? {
-              connect: data.track,
+              connect: data.lesson,
             }
           : undefined,
       },
@@ -62,7 +59,7 @@ export class LessonControllerBase {
         createdAt: true,
         id: true,
 
-        track: {
+        lesson: {
           select: {
             id: true,
           },
@@ -75,23 +72,23 @@ export class LessonControllerBase {
 
   @common.UseInterceptors(AclFilterResponseInterceptor)
   @nestAccessControl.UseRoles({
-    resource: "Lesson",
+    resource: "Video",
     action: "read",
     possession: "any",
   })
   @common.Get()
-  @swagger.ApiOkResponse({ type: [Lesson] })
+  @swagger.ApiOkResponse({ type: [Video] })
   @swagger.ApiForbiddenResponse()
-  @ApiNestedQuery(LessonFindManyArgs)
-  async findMany(@common.Req() request: Request): Promise<Lesson[]> {
-    const args = plainToClass(LessonFindManyArgs, request.query);
+  @ApiNestedQuery(VideoFindManyArgs)
+  async findMany(@common.Req() request: Request): Promise<Video[]> {
+    const args = plainToClass(VideoFindManyArgs, request.query);
     return this.service.findMany({
       ...args,
       select: {
         createdAt: true,
         id: true,
 
-        track: {
+        lesson: {
           select: {
             id: true,
           },
@@ -104,24 +101,24 @@ export class LessonControllerBase {
 
   @common.UseInterceptors(AclFilterResponseInterceptor)
   @nestAccessControl.UseRoles({
-    resource: "Lesson",
+    resource: "Video",
     action: "read",
     possession: "own",
   })
   @common.Get("/:id")
-  @swagger.ApiOkResponse({ type: Lesson })
+  @swagger.ApiOkResponse({ type: Video })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
   @swagger.ApiForbiddenResponse({ type: errors.ForbiddenException })
   async findOne(
-    @common.Param() params: LessonWhereUniqueInput
-  ): Promise<Lesson | null> {
+    @common.Param() params: VideoWhereUniqueInput
+  ): Promise<Video | null> {
     const result = await this.service.findOne({
       where: params,
       select: {
         createdAt: true,
         id: true,
 
-        track: {
+        lesson: {
           select: {
             id: true,
           },
@@ -140,27 +137,27 @@ export class LessonControllerBase {
 
   @common.UseInterceptors(AclValidateRequestInterceptor)
   @nestAccessControl.UseRoles({
-    resource: "Lesson",
+    resource: "Video",
     action: "update",
     possession: "any",
   })
   @common.Patch("/:id")
-  @swagger.ApiOkResponse({ type: Lesson })
+  @swagger.ApiOkResponse({ type: Video })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
   @swagger.ApiForbiddenResponse({ type: errors.ForbiddenException })
   async update(
-    @common.Param() params: LessonWhereUniqueInput,
-    @common.Body() data: LessonUpdateInput
-  ): Promise<Lesson | null> {
+    @common.Param() params: VideoWhereUniqueInput,
+    @common.Body() data: VideoUpdateInput
+  ): Promise<Video | null> {
     try {
       return await this.service.update({
         where: params,
         data: {
           ...data,
 
-          track: data.track
+          lesson: data.lesson
             ? {
-                connect: data.track,
+                connect: data.lesson,
               }
             : undefined,
         },
@@ -168,7 +165,7 @@ export class LessonControllerBase {
           createdAt: true,
           id: true,
 
-          track: {
+          lesson: {
             select: {
               id: true,
             },
@@ -188,17 +185,17 @@ export class LessonControllerBase {
   }
 
   @nestAccessControl.UseRoles({
-    resource: "Lesson",
+    resource: "Video",
     action: "delete",
     possession: "any",
   })
   @common.Delete("/:id")
-  @swagger.ApiOkResponse({ type: Lesson })
+  @swagger.ApiOkResponse({ type: Video })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
   @swagger.ApiForbiddenResponse({ type: errors.ForbiddenException })
   async delete(
-    @common.Param() params: LessonWhereUniqueInput
-  ): Promise<Lesson | null> {
+    @common.Param() params: VideoWhereUniqueInput
+  ): Promise<Video | null> {
     try {
       return await this.service.delete({
         where: params,
@@ -206,7 +203,7 @@ export class LessonControllerBase {
           createdAt: true,
           id: true,
 
-          track: {
+          lesson: {
             select: {
               id: true,
             },
@@ -223,107 +220,5 @@ export class LessonControllerBase {
       }
       throw error;
     }
-  }
-
-  @common.UseInterceptors(AclFilterResponseInterceptor)
-  @nestAccessControl.UseRoles({
-    resource: "Video",
-    action: "read",
-    possession: "any",
-  })
-  @common.Get("/:id/videos")
-  @ApiNestedQuery(VideoFindManyArgs)
-  async findManyVideos(
-    @common.Req() request: Request,
-    @common.Param() params: LessonWhereUniqueInput
-  ): Promise<Video[]> {
-    const query = plainToClass(VideoFindManyArgs, request.query);
-    const results = await this.service.findVideos(params.id, {
-      ...query,
-      select: {
-        createdAt: true,
-        id: true,
-
-        lesson: {
-          select: {
-            id: true,
-          },
-        },
-
-        updatedAt: true,
-      },
-    });
-    if (results === null) {
-      throw new errors.NotFoundException(
-        `No resource was found for ${JSON.stringify(params)}`
-      );
-    }
-    return results;
-  }
-
-  @nestAccessControl.UseRoles({
-    resource: "Lesson",
-    action: "update",
-    possession: "any",
-  })
-  @common.Post("/:id/videos")
-  async connectVideos(
-    @common.Param() params: LessonWhereUniqueInput,
-    @common.Body() body: VideoWhereUniqueInput[]
-  ): Promise<void> {
-    const data = {
-      videos: {
-        connect: body,
-      },
-    };
-    await this.service.update({
-      where: params,
-      data,
-      select: { id: true },
-    });
-  }
-
-  @nestAccessControl.UseRoles({
-    resource: "Lesson",
-    action: "update",
-    possession: "any",
-  })
-  @common.Patch("/:id/videos")
-  async updateVideos(
-    @common.Param() params: LessonWhereUniqueInput,
-    @common.Body() body: VideoWhereUniqueInput[]
-  ): Promise<void> {
-    const data = {
-      videos: {
-        set: body,
-      },
-    };
-    await this.service.update({
-      where: params,
-      data,
-      select: { id: true },
-    });
-  }
-
-  @nestAccessControl.UseRoles({
-    resource: "Lesson",
-    action: "update",
-    possession: "any",
-  })
-  @common.Delete("/:id/videos")
-  async disconnectVideos(
-    @common.Param() params: LessonWhereUniqueInput,
-    @common.Body() body: VideoWhereUniqueInput[]
-  ): Promise<void> {
-    const data = {
-      videos: {
-        disconnect: body,
-      },
-    };
-    await this.service.update({
-      where: params,
-      data,
-      select: { id: true },
-    });
   }
 }

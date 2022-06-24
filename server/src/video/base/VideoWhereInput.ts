@@ -11,34 +11,33 @@ https://docs.amplication.com/docs/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { TrackWhereUniqueInput } from "../../track/base/TrackWhereUniqueInput";
-import { ValidateNested, IsOptional } from "class-validator";
+import { StringFilter } from "../../util/StringFilter";
 import { Type } from "class-transformer";
-import { VideoCreateNestedManyWithoutLessonsInput } from "./VideoCreateNestedManyWithoutLessonsInput";
+import { IsOptional, ValidateNested } from "class-validator";
+import { LessonWhereUniqueInput } from "../../lesson/base/LessonWhereUniqueInput";
 @InputType()
-class LessonCreateInput {
+class VideoWhereInput {
   @ApiProperty({
     required: false,
-    type: () => TrackWhereUniqueInput,
+    type: StringFilter,
   })
-  @ValidateNested()
-  @Type(() => TrackWhereUniqueInput)
+  @Type(() => StringFilter)
   @IsOptional()
-  @Field(() => TrackWhereUniqueInput, {
+  @Field(() => StringFilter, {
     nullable: true,
   })
-  track?: TrackWhereUniqueInput | null;
+  id?: StringFilter;
 
   @ApiProperty({
     required: false,
-    type: () => VideoCreateNestedManyWithoutLessonsInput,
+    type: () => LessonWhereUniqueInput,
   })
   @ValidateNested()
-  @Type(() => VideoCreateNestedManyWithoutLessonsInput)
+  @Type(() => LessonWhereUniqueInput)
   @IsOptional()
-  @Field(() => VideoCreateNestedManyWithoutLessonsInput, {
+  @Field(() => LessonWhereUniqueInput, {
     nullable: true,
   })
-  videos?: VideoCreateNestedManyWithoutLessonsInput;
+  lesson?: LessonWhereUniqueInput;
 }
-export { LessonCreateInput };
+export { VideoWhereInput };

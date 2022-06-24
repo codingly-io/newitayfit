@@ -19,33 +19,31 @@ import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
 import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
 import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
-import { CreateLessonArgs } from "./CreateLessonArgs";
-import { UpdateLessonArgs } from "./UpdateLessonArgs";
-import { DeleteLessonArgs } from "./DeleteLessonArgs";
-import { LessonFindManyArgs } from "./LessonFindManyArgs";
-import { LessonFindUniqueArgs } from "./LessonFindUniqueArgs";
-import { Lesson } from "./Lesson";
-import { VideoFindManyArgs } from "../../video/base/VideoFindManyArgs";
-import { Video } from "../../video/base/Video";
-import { Track } from "../../track/base/Track";
-import { LessonService } from "../lesson.service";
+import { CreateVideoArgs } from "./CreateVideoArgs";
+import { UpdateVideoArgs } from "./UpdateVideoArgs";
+import { DeleteVideoArgs } from "./DeleteVideoArgs";
+import { VideoFindManyArgs } from "./VideoFindManyArgs";
+import { VideoFindUniqueArgs } from "./VideoFindUniqueArgs";
+import { Video } from "./Video";
+import { Lesson } from "../../lesson/base/Lesson";
+import { VideoService } from "../video.service";
 
-@graphql.Resolver(() => Lesson)
+@graphql.Resolver(() => Video)
 @common.UseGuards(GqlDefaultAuthGuard, gqlACGuard.GqlACGuard)
-export class LessonResolverBase {
+export class VideoResolverBase {
   constructor(
-    protected readonly service: LessonService,
+    protected readonly service: VideoService,
     protected readonly rolesBuilder: nestAccessControl.RolesBuilder
   ) {}
 
   @graphql.Query(() => MetaQueryPayload)
   @nestAccessControl.UseRoles({
-    resource: "Lesson",
+    resource: "Video",
     action: "read",
     possession: "any",
   })
-  async _lessonsMeta(
-    @graphql.Args() args: LessonFindManyArgs
+  async _videosMeta(
+    @graphql.Args() args: VideoFindManyArgs
   ): Promise<MetaQueryPayload> {
     const results = await this.service.count({
       ...args,
@@ -58,26 +56,26 @@ export class LessonResolverBase {
   }
 
   @common.UseInterceptors(AclFilterResponseInterceptor)
-  @graphql.Query(() => [Lesson])
+  @graphql.Query(() => [Video])
   @nestAccessControl.UseRoles({
-    resource: "Lesson",
+    resource: "Video",
     action: "read",
     possession: "any",
   })
-  async lessons(@graphql.Args() args: LessonFindManyArgs): Promise<Lesson[]> {
+  async videos(@graphql.Args() args: VideoFindManyArgs): Promise<Video[]> {
     return this.service.findMany(args);
   }
 
   @common.UseInterceptors(AclFilterResponseInterceptor)
-  @graphql.Query(() => Lesson, { nullable: true })
+  @graphql.Query(() => Video, { nullable: true })
   @nestAccessControl.UseRoles({
-    resource: "Lesson",
+    resource: "Video",
     action: "read",
     possession: "own",
   })
-  async lesson(
-    @graphql.Args() args: LessonFindUniqueArgs
-  ): Promise<Lesson | null> {
+  async video(
+    @graphql.Args() args: VideoFindUniqueArgs
+  ): Promise<Video | null> {
     const result = await this.service.findOne(args);
     if (result === null) {
       return null;
@@ -86,21 +84,21 @@ export class LessonResolverBase {
   }
 
   @common.UseInterceptors(AclValidateRequestInterceptor)
-  @graphql.Mutation(() => Lesson)
+  @graphql.Mutation(() => Video)
   @nestAccessControl.UseRoles({
-    resource: "Lesson",
+    resource: "Video",
     action: "create",
     possession: "any",
   })
-  async createLesson(@graphql.Args() args: CreateLessonArgs): Promise<Lesson> {
+  async createVideo(@graphql.Args() args: CreateVideoArgs): Promise<Video> {
     return await this.service.create({
       ...args,
       data: {
         ...args.data,
 
-        track: args.data.track
+        lesson: args.data.lesson
           ? {
-              connect: args.data.track,
+              connect: args.data.lesson,
             }
           : undefined,
       },
@@ -108,24 +106,24 @@ export class LessonResolverBase {
   }
 
   @common.UseInterceptors(AclValidateRequestInterceptor)
-  @graphql.Mutation(() => Lesson)
+  @graphql.Mutation(() => Video)
   @nestAccessControl.UseRoles({
-    resource: "Lesson",
+    resource: "Video",
     action: "update",
     possession: "any",
   })
-  async updateLesson(
-    @graphql.Args() args: UpdateLessonArgs
-  ): Promise<Lesson | null> {
+  async updateVideo(
+    @graphql.Args() args: UpdateVideoArgs
+  ): Promise<Video | null> {
     try {
       return await this.service.update({
         ...args,
         data: {
           ...args.data,
 
-          track: args.data.track
+          lesson: args.data.lesson
             ? {
-                connect: args.data.track,
+                connect: args.data.lesson,
               }
             : undefined,
         },
@@ -140,15 +138,15 @@ export class LessonResolverBase {
     }
   }
 
-  @graphql.Mutation(() => Lesson)
+  @graphql.Mutation(() => Video)
   @nestAccessControl.UseRoles({
-    resource: "Lesson",
+    resource: "Video",
     action: "delete",
     possession: "any",
   })
-  async deleteLesson(
-    @graphql.Args() args: DeleteLessonArgs
-  ): Promise<Lesson | null> {
+  async deleteVideo(
+    @graphql.Args() args: DeleteVideoArgs
+  ): Promise<Video | null> {
     try {
       return await this.service.delete(args);
     } catch (error) {
@@ -162,34 +160,14 @@ export class LessonResolverBase {
   }
 
   @common.UseInterceptors(AclFilterResponseInterceptor)
-  @graphql.ResolveField(() => [Video])
+  @graphql.ResolveField(() => Lesson, { nullable: true })
   @nestAccessControl.UseRoles({
-    resource: "Video",
+    resource: "Lesson",
     action: "read",
     possession: "any",
   })
-  async videos(
-    @graphql.Parent() parent: Lesson,
-    @graphql.Args() args: VideoFindManyArgs
-  ): Promise<Video[]> {
-    const results = await this.service.findVideos(parent.id, args);
-
-    if (!results) {
-      return [];
-    }
-
-    return results;
-  }
-
-  @common.UseInterceptors(AclFilterResponseInterceptor)
-  @graphql.ResolveField(() => Track, { nullable: true })
-  @nestAccessControl.UseRoles({
-    resource: "Track",
-    action: "read",
-    possession: "any",
-  })
-  async track(@graphql.Parent() parent: Lesson): Promise<Track | null> {
-    const result = await this.service.getTrack(parent.id);
+  async lesson(@graphql.Parent() parent: Video): Promise<Lesson | null> {
+    const result = await this.service.getLesson(parent.id);
 
     if (!result) {
       return null;

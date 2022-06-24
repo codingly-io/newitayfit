@@ -11,34 +11,21 @@ https://docs.amplication.com/docs/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { TrackWhereUniqueInput } from "../../track/base/TrackWhereUniqueInput";
+import { LessonWhereUniqueInput } from "../../lesson/base/LessonWhereUniqueInput";
 import { ValidateNested, IsOptional } from "class-validator";
 import { Type } from "class-transformer";
-import { VideoUpdateManyWithoutLessonsInput } from "./VideoUpdateManyWithoutLessonsInput";
 @InputType()
-class LessonUpdateInput {
+class VideoUpdateInput {
   @ApiProperty({
     required: false,
-    type: () => TrackWhereUniqueInput,
+    type: () => LessonWhereUniqueInput,
   })
   @ValidateNested()
-  @Type(() => TrackWhereUniqueInput)
+  @Type(() => LessonWhereUniqueInput)
   @IsOptional()
-  @Field(() => TrackWhereUniqueInput, {
+  @Field(() => LessonWhereUniqueInput, {
     nullable: true,
   })
-  track?: TrackWhereUniqueInput | null;
-
-  @ApiProperty({
-    required: false,
-    type: () => VideoUpdateManyWithoutLessonsInput,
-  })
-  @ValidateNested()
-  @Type(() => VideoUpdateManyWithoutLessonsInput)
-  @IsOptional()
-  @Field(() => VideoUpdateManyWithoutLessonsInput, {
-    nullable: true,
-  })
-  videos?: VideoUpdateManyWithoutLessonsInput;
+  lesson?: LessonWhereUniqueInput | null;
 }
-export { LessonUpdateInput };
+export { VideoUpdateInput };
